@@ -4,11 +4,7 @@
 -- Course: ICS20
 -- This program displays a rectangle, and a circle, and will show each shape's area.
 -----------------------------------------------------------------------------------------
-
--- Your code here
-
 -- Code For The Rectangle
-
 -- create my local variables
 local areaText
 local textSize = 50
@@ -59,7 +55,6 @@ areaText.y = display.contentHeight/2
 areaText:setTextColor(1, 1, 1)
 
 -- Code For The Circle
-
 -- create my local variables
 local circleAreaText
 local textSize = 30
