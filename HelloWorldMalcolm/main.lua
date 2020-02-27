@@ -32,3 +32,9 @@ textObjectSignature = display.newText( "Created by: Malcolm Cantin", 500, 500, n
 
 -- sets the color of the text signature
 textObjectSignature:setTextColor(66/255, 200/255, 245/255)
+
+-- print signature to console
+print ("**** This program was created by Malcolm Cantin")
+
+-- print "This is awesome!" to the console
+print ("**** This is awesome!")
