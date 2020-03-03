@@ -42,7 +42,6 @@ end
 Runtime:addEventListener("enterFrame", MoveShip)
 
 -- CODE FOR THE ROCKETSHIP
-
 -- character image with width and height
 local rocketship = display.newImageRect("Images/rocketship.png", 200, 200)
 
@@ -59,7 +58,7 @@ rocketship.y = display.contentHeight*(2/3)
 -- Description: This function adds the scroll speed to the x-value of the ship
 local function MoveRocket(event)
 	-- add the scroll speed to the x-value of the ship
-	rocketship.x = rocketship.x - scrollSpeed
+	rocketship.x = rocketship.x - scrollSpeed - 2
 	-- change the transparency of the ship every time it moves so that it fades out
 	rocketship.alpha = rocketship.alpha - 0.000000001
 end
