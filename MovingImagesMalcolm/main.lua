@@ -68,4 +68,3 @@ Runtime:addEventListener("enterFrame", MoveRocket)
 
 -- flip the rocket
 rocketship:scale(-1, 1)
-
