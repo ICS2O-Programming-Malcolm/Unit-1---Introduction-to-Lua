@@ -1,7 +1,9 @@
 -- Title: TouchAndReactMalcolm
 -- Name: Malcolm Cantin
 -- Course: ICS2O
--- This program
+-- This program allows a user to click on a button which will make the button change colour and 
+-- display a message, including extra images and sounds that will be displayed and played when 
+-- the button is either clicked or relased
 
 -- hide the status bar 
 display.setStatusBar(display.HiddenStatusBar)
