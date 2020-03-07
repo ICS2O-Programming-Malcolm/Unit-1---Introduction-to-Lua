@@ -43,8 +43,8 @@ redX.isVisible = true
 
 -- add sounds that will play depending on whether the blue button is clicked or the red button
 -- is released
-local correctSound = audio.loadStream( "Correct Answer Sound Effect.mp3" )
-local wrongBuzzer = audio.loadStream( "Wrong Buzzer Sound Effect.mp3" )
+local correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3" )
+local wrongBuzzer = audio.loadSound( "Sounds/Wrong Buzzer Sound Effect.mp3" )
 
 -- Function: BlueButtonListener
 -- Input: touch listener
@@ -58,6 +58,7 @@ local function BlueButtonListener(touch)
 		textObject.isVisible = true
 		checkmark.isVisible = true
 		redX.isVisible = false
+		audio.play( correctSound, {duration = 500} )
 	end
 
 	if (touch.phase == "ended") then
@@ -66,6 +67,7 @@ local function BlueButtonListener(touch)
 		textObject.isVisible = false
 		checkmark.isVisible = false
 		redX.isVisible = true
+		audio.play( wrongBuzzer, {duration = 500} )
 	end
 end
 
@@ -84,6 +86,7 @@ local function RedButtonListener(touch)
 		textObject.isVisible = false
 		checkmark.isVisible = false
 		redX.isVisible = true
+		audio.play( wrongBuzzer, {duration = 500} )
 	end
 
 	if (touch.phase == "ended") then
@@ -92,6 +95,7 @@ local function RedButtonListener(touch)
 		textObject.isVisible = false
 		checkmark.isVisible = false
 		redX.isVisible = true
+		audio.play( wrongBuzzer, {duration = 500} )
 	end
 end
 
