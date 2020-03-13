@@ -18,11 +18,18 @@ display.setDefault("background", 124/255, 249/255, 199/255)
 -- create local variables
 local questionObject
 local correctObject
+
 local numericField
+
 local randomNumber1
 local randomNumber2
+
 local userAnswer
 local correctAnswer
+local correctAnswerText
+local incorrectAnswer
+
+local points = 0
 
 ------------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -30,15 +37,14 @@ local correctAnswer
 
 local function AskQuestion()
 	-- generate 2 random numbers between a max. and a min. number
-	randomNumber1 = math.random(0, 10)
-	randomNumber2 = math.random(0, 10)
+	randomNumber1 = math.random(0, 15)
+	randomNumber2 = math.random(0, 15)
 
 	-- set correctAnswer to the added 2 random numbers
 	correctAnswer = randomNumber1 + randomNumber2
 
 	-- create question in text object\
 	questionObject.text = randomNumber1 .. " + " .. randomNumber2 .. " = "
-
 end
 
 local function HideCorrect()
@@ -46,9 +52,14 @@ local function HideCorrect()
 	AskQuestion()
 end
 
+local function HideIncorrect()
+	incorrectObject.isVisible = false
+	AskQuestion()
+end
+
 local function NumericFieldListener( event )
 
-	-- User begins editing "numericField"
+	-- user begins editing "numericField"
 	if ( event.phase == "began" ) then
 
 		-- clear text field
@@ -62,8 +73,26 @@ local function NumericFieldListener( event )
 		-- if the user's answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
 			correctObject.isVisible = true
-			timer.performWithDelay(2000, HideCorrect)
+			-- give a point if the user gets the correct answer
+			points = points + 1
 
+			-- update it in the display object
+			pointsText.text = "Points = " .. points
+			if (points == 5) then
+				local win = display.newImageRect("Images/win.png", 300, 300)
+				win.x = display.contentWidth/4
+				win.y = display.contentHeight/4
+				AskQuestion()
+			end
+
+			-- perform HideCorrect with a delay and clear the text field
+			timer.performWithDelay(1500, HideCorrect)
+			event.target.text = ""
+		else
+			incorrectObject.isVisible = true
+			correctAnswerText = display.newText( "The correct answer is " .. correctAnswer, display.contentWidth/2, display.contentHeight*(4/5), nil, 50)
+			timer.performWithDelay(4000, HideIncorrect)
+			event.target.text = ""
 		end
 	end
 end
@@ -72,17 +101,29 @@ end
 -- OBJECT CREATION
 ------------------------------------------------------------------------------------------------
 
+-- display the amount of points as a text object
+pointsText = display.newText("Points = " .. points, display.contentWidth*(3/4), display.contentHeight*(1/4), nil, 50)
+pointsText:setTextColor(0/255, 0/255, 0/255)
+
 -- displays a question and sets the colour
-questionObject = display.newText( "", display.contentWidth/3, display.contentHeight/2, nil, 50 )
+questionObject = display.newText( "", display.contentWidth/2 - 50, display.contentHeight/2, nil, 100 )
 questionObject:setTextColor(155/255, 42/255, 198/255)
+
+-- create correct text to display if user gets question wrong
+
 
 -- create the correct text object and make it invisible
 correctObject = display.newText( "Correct!", display.contentWidth/2, display.contentHeight*2/3, nil, 50 )
-correctObject:setTextColor(155/255, 42/255, 198/255)
+correctObject:setTextColor(0/255, 0/255, 204/255)
 correctObject.isVisible = false
 
+-- create the incorrect text object and make it invisible
+incorrectObject = display.newText( "Incorrect!", display.contentWidth/2, display.contentHeight*2/3, nil, 50 )
+incorrectObject:setTextColor(204/255, 0/255, 102/255)
+incorrectObject.isVisible = false
+
 -- create numeric field
-numericField = native.newTextField( display.contentWidth/2, display.contentHeight/2, 150, 80 )
+numericField = native.newTextField( display.contentWidth*(3/4), display.contentHeight/2, 150, 100 )
 numericField.inputType = "number"
 
 -- add the event listeners for the numeric field
