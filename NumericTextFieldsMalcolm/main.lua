@@ -82,7 +82,6 @@ local function NumericFieldListener( event )
 				local win = display.newImageRect("Images/win.png", 300, 300)
 				win.x = display.contentWidth/4
 				win.y = display.contentHeight/4
-				AskQuestion()
 			end
 
 			-- perform HideCorrect with a delay and clear the text field
