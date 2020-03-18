@@ -30,6 +30,7 @@ local correctAnswerText
 local incorrectAnswer
 
 local points = 0
+local wrongs = 0
 
 ------------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
@@ -72,26 +73,39 @@ local function NumericFieldListener( event )
 
 		-- if the user's answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
-			correctObject.isVisible = true
-			-- give a point if the user gets the correct answer
+		
+			-- give a point if the user gets the correct answer and display "Correct!"
 			points = points + 1
+			correctObject.isVisible = true
 
 			-- update it in the display object
 			pointsText.text = "Points = " .. points
-			if (points == 5) then
-				local win = display.newImageRect("Images/win.png", 300, 300)
-				win.x = display.contentWidth/4
-				win.y = display.contentHeight/4
-			end
 
 			-- perform HideCorrect with a delay and clear the text field
 			timer.performWithDelay(1500, HideCorrect)
 			event.target.text = ""
+
 		else
+			-- add one to the wrongs total
+			wrongs = wrongs + 1
+
+			-- display "Incorrect!" and show the right answer
 			incorrectObject.isVisible = true
-			correctAnswerText = display.newText( "The correct answer is " .. correctAnswer, display.contentWidth/2, display.contentHeight*(4/5), nil, 50)
+			correctAnswerText = display.newText( "The correct answer is " .. correctAnswer, display.contentWidth/2, display.contentHeight*(4/5), nil, 50, {duration=2000} )
 			timer.performWithDelay(4000, HideIncorrect)
 			event.target.text = ""
+		end	
+				
+		if (points == 5) then
+			local win = display.newImageRect("Images/win.png", 300, 300)
+			win.x = display.contentWidth/4
+			win.y = display.contentHeight/4
+		end
+		
+		if (wrongs == 3) then
+			local lose = display.newImageRect("Images/lose.png", 512, 384)
+			lose.x = display.contentWidth/4
+			lose.y = display.contentHeight/4
 		end
 	end
 end
@@ -107,9 +121,6 @@ pointsText:setTextColor(0/255, 0/255, 0/255)
 -- displays a question and sets the colour
 questionObject = display.newText( "", display.contentWidth/2 - 50, display.contentHeight/2, nil, 100 )
 questionObject:setTextColor(155/255, 42/255, 198/255)
-
--- create correct text to display if user gets question wrong
-
 
 -- create the correct text object and make it invisible
 correctObject = display.newText( "Correct!", display.contentWidth/2, display.contentHeight*2/3, nil, 50 )
