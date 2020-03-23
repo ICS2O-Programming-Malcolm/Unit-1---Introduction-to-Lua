@@ -18,6 +18,10 @@ display.setDefault("background", 124/255, 249/255, 199/255)
 -- create local variables
 local questionObject
 local correctObject
+local incorrectObject
+
+local winImageObject
+local loseImageObject
 
 local numericField
 
@@ -58,6 +62,18 @@ local function HideIncorrect()
 	AskQuestion()
 end
 
+local function HideCorrectAnswerText()
+	correctAnswerText.isVisible = false
+end
+
+local function HideWinImage()
+	winImageObject.isVisible = false
+end
+
+local function HideLoseImage()
+	loseImageObject.isVisible = false
+end
+
 local function NumericFieldListener( event )
 
 	-- user begins editing "numericField"
@@ -91,21 +107,22 @@ local function NumericFieldListener( event )
 
 			-- display "Incorrect!" and show the right answer
 			incorrectObject.isVisible = true
-			correctAnswerText = display.newText( "The correct answer is " .. correctAnswer, display.contentWidth/2, display.contentHeight*(4/5), nil, 50, {duration=2000} )
-			timer.performWithDelay(4000, HideIncorrect)
+			correctAnswerText = display.newText( "The correct answer is " .. correctAnswer, display.contentWidth/2, display.contentHeight*(4/5), nil, 50)
+			timer.performWithDelay(2000, HideIncorrect)
+			timer.performWithDelay(2000, HideCorrectAnswerText)
 			event.target.text = ""
 		end	
 				
 		if (points == 5) then
-			local win = display.newImageRect("Images/win.png", 300, 300)
-			win.x = display.contentWidth/4
-			win.y = display.contentHeight/4
+			winImageObject.isVisible = true
+			timer.performWithDelay(3000, HideWinImage)
+			return 0;
 		end
 		
 		if (wrongs == 3) then
-			local lose = display.newImageRect("Images/lose.png", 512, 384)
-			lose.x = display.contentWidth/4
-			lose.y = display.contentHeight/4
+			loseImageObject.isVisible = true
+			timer.performWithDelay(3000, HideLoseImage)
+			return 0;
 		end
 	end
 end
@@ -131,6 +148,18 @@ correctObject.isVisible = false
 incorrectObject = display.newText( "Incorrect!", display.contentWidth/2, display.contentHeight*2/3, nil, 50 )
 incorrectObject:setTextColor(204/255, 0/255, 102/255)
 incorrectObject.isVisible = false
+
+-- create win image object and make it invisble
+winImageObject = display.newImageRect("Images/win.png", 300, 300)
+winImageObject.x = display.contentWidth/4
+winImageObject.y = display.contentHeight/4
+winImageObject.isVisible = false
+
+-- create lose image object and make it invisible
+loseImageObject = display.newImageRect("Images/lose.png", 300, 300)
+loseImageObject.x = display.contentWidth/4
+loseImageObject.y = display.contentHeight/4
+loseImageObject.isVisible = false
 
 -- create numeric field
 numericField = native.newTextField( display.contentWidth*(3/4), display.contentHeight/2, 150, 100 )
