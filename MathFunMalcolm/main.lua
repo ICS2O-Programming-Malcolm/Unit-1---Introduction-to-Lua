@@ -140,9 +140,6 @@ local function NumericFieldListener( event )
 			event.target.text = ""
 
 		else
-			-- add one to the wrongs total
-			wrongs = wrongs + 1
-
 			-- display "Incorrect!" and show the right answer
 			incorrectObject.isVisible = true
 			correctAnswerText = display.newText( "The correct answer is " .. correctAnswer, display.contentWidth/2, display.contentHeight*(4/5), nil, 50)
@@ -159,7 +156,7 @@ end
 
 -- display the amount of points as a text object
 pointsText = display.newText("Points = " .. points, display.contentWidth*(3/4), display.contentHeight*(1/4), nil, 50)
-pointsText:setTextColor(0/255, 0/255, 0/255)
+pointsText:setTextColor(255/255, 255/255, 255/255)
 
 -- displays a question and sets the colour
 questionObject = display.newText( "", display.contentWidth/2 - 50, display.contentHeight/2, nil, 100 )
