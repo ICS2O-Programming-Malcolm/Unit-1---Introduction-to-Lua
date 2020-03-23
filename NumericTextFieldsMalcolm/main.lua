@@ -2,7 +2,8 @@
 -- Title: NumericTextFieldsMalcolm
 -- Name: Malcolm Cantin
 -- Course: ICS2O
--- This program... ... ... ... ... ... ... ... ...
+-- This program asks the user a math question which they can input an answer. 5 right answers 
+-- and they win, 3 wrong answers and they lose.
 ------------------------------------------------------------------------------------------------
 
 -- hide the status bar
@@ -116,13 +117,11 @@ local function NumericFieldListener( event )
 		if (points == 5) then
 			winImageObject.isVisible = true
 			timer.performWithDelay(3000, HideWinImage)
-			return 0;
 		end
 		
 		if (wrongs == 3) then
 			loseImageObject.isVisible = true
 			timer.performWithDelay(3000, HideLoseImage)
-			return 0;
 		end
 	end
 end
