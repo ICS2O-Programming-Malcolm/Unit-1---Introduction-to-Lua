@@ -38,6 +38,25 @@ local points = 0
 local wrongs = 0
 
 ------------------------------------------------------------------------------------------------
+-- SOUNDS
+------------------------------------------------------------------------------------------------
+
+-- Correct sound
+local correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3")
+local correctSoundChannel
+
+-- Incorrect sound
+local incorrectSound = audio.loadSound( "Sounds/Wrong Buzzer Sound Effect.mp3")
+local incorrectSoundChannel
+
+-- Background music
+local backgroundSound = audio.loadSound( "Sounds/The Price Is Right.mp3")
+local backgroundSoundChannel
+
+-- Play the background music when the game begins
+backgroundSoundChannel = audio.play(backgroundSound)
+
+------------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 ------------------------------------------------------------------------------------------------
 
@@ -128,9 +147,10 @@ local function NumericFieldListener( event )
 		-- if the user's answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
 		
-			-- give a point if the user gets the correct answer and display "Correct!"
+			-- give a point if the user gets the correct answer, display "Correct!", and play a correct answer sound
 			points = points + 1
 			correctObject.isVisible = true
+			correctSoundChannel = audio.play(correctSound)
 
 			-- update it in the display object
 			pointsText.text = "Points = " .. points
@@ -146,6 +166,9 @@ local function NumericFieldListener( event )
 			timer.performWithDelay(2000, HideIncorrect)
 			timer.performWithDelay(2000, HideCorrectAnswerText)
 			event.target.text = ""
+
+			-- play incorrect answer sound
+			incorrectSoundChannel = audio.play(incorrectSound)
 		end	
 	end
 end

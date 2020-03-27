@@ -38,6 +38,14 @@ local points = 0
 local wrongs = 0
 
 ------------------------------------------------------------------------------------------------
+-- SOUNDS
+------------------------------------------------------------------------------------------------
+
+-- Correct sound
+local correctSound = audio.loadSound( "Sounds/Correct Answer Sound Effect.mp3")
+local correctSoundChannel
+
+------------------------------------------------------------------------------------------------
 -- LOCAL FUNCTIONS
 ------------------------------------------------------------------------------------------------
 
@@ -91,9 +99,10 @@ local function NumericFieldListener( event )
 		-- if the user's answer and the correct answer are the same:
 		if (userAnswer == correctAnswer) then
 		
-			-- give a point if the user gets the correct answer and display "Correct!"
+			-- give a point if the user gets the correct answer, display "Correct!", and play a correct answer sound
 			points = points + 1
 			correctObject.isVisible = true
+			correctSoundChannel = audio.play(correctSound)
 
 			-- update it in the display object
 			pointsText.text = "Points = " .. points
