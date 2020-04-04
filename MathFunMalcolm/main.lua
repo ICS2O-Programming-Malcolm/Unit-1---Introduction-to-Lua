@@ -38,15 +38,17 @@ local points = 0
 local wrongs = 0
 
 -- variables for the timer
-local totalSeconds = 5
-local secondsLeft = 5
+local totalSeconds = 10
+local secondsLeft = 10
 local clockText
 local countDownTimer
 
 -- variables for the heart
-local lives = 3
+local lives = 5
 local heart1
 local heart2
+
+local stopGame = false
 
 ------------------------------------------------------------------------------------------------
 -- SOUNDS
@@ -75,40 +77,26 @@ backgroundSoundChannel = audio.play(backgroundSound)
 -- LOCAL FUNCTIONS
 ------------------------------------------------------------------------------------------------
 
-local function UpdateTime()
+local function LoseLives()
 
-	-- decrement the number of seconds
-	secondsLeft = secondsLeft - 1
+	lives = lives - 1
 
-	-- display the number of seconds left in the clock object
-	clockText = display.newText(secondsLeft .. "", display.contentWidth*(1/4), display.contentHeight*(4/5), nil, 50 )
-	clockText:setTextColor(255/255, 255/255, 255/255)
-	clockText.isVisible = true
+	secondsLeft = totalSeconds
 
-	if (secondsLeft == 0) then
-		-- reset the number of seconds left
-		secondsLeft = totalSeconds
-		lives = lives - 1
-
-		if (lives == 2) then
-			heart2.isVisible = false
-		elseif (lives == 1) then
-			heart1.isVisible = false
-		elseif (lives == 0) then
-			heart0.isVisible = false
-			gameOverSoundChannel = audio.play(gameOverSound)
-			gameOverObject.isVisible = true
-		end
-
-		AskQuestion()
-		
+	if (lives == 4) then
+		heart4.isVisible = false
+	elseif (lives == 3) then
+		heart3.isVisible = false
+	elseif (lives == 2) then
+		heart2.isVisible = false
+	elseif (lives == 1) then
+		heart1.isVisible = false
+		gameOverSoundChannel = audio.play(gameOverSound)
+		gameOverObject.isVisible = true
+		timer.cancel(countDownTimer)
+		clockText.isVisible = false
+		stopGame = true
 	end
-end
-
--- function that calls the timer
-local function StartTimer()
-		-- create a countdown timer that loops infinitely
-		countDownTimer = timer.performWithDelay(1000, UpdateTime, 0)
 end
 
 local function AskQuestion()
@@ -170,6 +158,27 @@ local function AskQuestion()
     end
 end
 
+local function UpdateTime()
+
+	-- decrement the number of seconds
+	secondsLeft = secondsLeft - 1
+
+	-- display the number of seconds left in the clock object
+	clockText.text = secondsLeft .. ""
+
+	if (secondsLeft == 0) then
+		-- reset the number of seconds left
+		LoseLives()
+		AskQuestion()
+	end
+end
+
+-- function that calls the timer
+local function StartTimer()
+		-- create a countdown timer that loops infinitely
+		countDownTimer = timer.performWithDelay(1000, UpdateTime, 0)
+end
+
 local function HideCorrect()
 	correctObject.isVisible = false
 	AskQuestion()
@@ -177,7 +186,9 @@ end
 
 local function HideIncorrect()
 	incorrectObject.isVisible = false
+	if (stopGame == false) then
 	AskQuestion()
+	end
 end
 
 local function HideCorrectAnswerText()
@@ -204,6 +215,7 @@ local function NumericFieldListener( event )
 			points = points + 1
 			correctObject.isVisible = true
 			correctSoundChannel = audio.play(correctSound)
+			secondsLeft = totalSeconds
 
 			-- update it in the display object
 			pointsText.text = "Points = " .. points
@@ -213,13 +225,14 @@ local function NumericFieldListener( event )
 			event.target.text = ""
 
 		else
+
 			-- display "Incorrect!", show the right answer, and subtract one life
 			incorrectObject.isVisible = true
 			correctAnswerText = display.newText( "The correct answer is " .. correctAnswer, display.contentWidth/2, display.contentHeight*(4/5), nil, 50)
 			timer.performWithDelay(2000, HideIncorrect)
 			timer.performWithDelay(2000, HideCorrectAnswerText)
-			lives = lives - 1
 			event.target.text = ""
+			LoseLives()
 
 			-- play incorrect answer sound
 			incorrectSoundChannel = audio.play(incorrectSound)
@@ -232,10 +245,6 @@ end
 ------------------------------------------------------------------------------------------------
 
 -- create the lives to display on the screen
-heart0 = display.newImageRect("Images/heart.png", 100, 100)
-heart0.x = display.contentWidth * 5 / 8
-heart0.y = display.contentWidth * 1 / 7
-
 heart1 = display.newImageRect("Images/heart.png", 100, 100)
 heart1.x = display.contentWidth * 7 / 8
 heart1.y = display.contentWidth * 1 / 7
@@ -244,9 +253,22 @@ heart2 = display.newImageRect("Images/heart.png", 100, 100)
 heart2.x = display.contentWidth * 6 / 8
 heart2.y = display.contentWidth * 1 / 7
 
+heart3 = display.newImageRect("Images/heart.png", 100, 100)
+heart3.x = display.contentWidth * 5 / 8
+heart3.y = display.contentWidth * 1 / 7
+
+heart4 = display.newImageRect("Images/heart.png", 100, 100)
+heart4.x = display.contentWidth * 4 / 8
+heart4.y = display.contentWidth * 1 / 7
+
 -- display the amount of points as a text object
 pointsText = display.newText("Points = " .. points, display.contentWidth*(1/4), display.contentHeight*(1/5), nil, 50)
 pointsText:setTextColor(255/255, 255/255, 255/255)
+
+-- display the number of seconds remaining
+clockText = display.newText( secondsLeft .. "", display.contentWidth*(5/6), display.contentHeight*(6/7), nil, 150)
+clockText:setTextColor(255/255, 255/255, 255/255)
+clockText.isVisible = true
 
 -- displays a question and sets the colour
 questionObject = display.newText("", display.contentWidth/2 - 50, display.contentHeight/2, nil, 100)
@@ -263,9 +285,9 @@ incorrectObject:setTextColor(204/255, 0/255, 102/255)
 incorrectObject.isVisible = false
 
 -- create game over image
-gameOverObject = display.newImageRect("Images/gameOver.png", 200, 200)
+gameOverObject = display.newImageRect("Images/gameOver.png", 300, 300)
 gameOverObject.x = display.contentWidth * 1 / 2
-gameOverObject.y = display.contentWidth * 1 / 2
+gameOverObject.y = display.contentWidth * 1 / 3
 gameOverObject.isVisible = false
 
 -- create numeric field
