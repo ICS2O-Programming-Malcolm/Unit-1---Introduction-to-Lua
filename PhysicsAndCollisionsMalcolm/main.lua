@@ -44,14 +44,14 @@ physics.addBody(ground, "static", {friction = 0.5, bounce = 0.3})
 local beam = display.newImage("Images/beam.png", 0, 0)
 
 -- beam parameters
-beam.x = display.contentCenterX / 5
+beam.x = display.contentCenterX / 7.1
 beam.y = display.contentCenterY * 1.65
 
 beam.width = display.contentWidth / 2
 beam.height = display.contentHeight * (1/10)
 
 -- rotate the beam -60 degrees so it is on an angle
-beam:rotate(45)
+beam:rotate(60)
 
 -- send it to the back layer
 beam:toBack()

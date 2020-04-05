@@ -79,6 +79,8 @@ backgroundSoundChannel = audio.play(backgroundSound)
 
 local function LoseLives()
 
+	incorrectSoundChannel = audio.play(incorrectSound)
+
 	lives = lives - 1
 
 	secondsLeft = totalSeconds
@@ -96,6 +98,7 @@ local function LoseLives()
 		timer.cancel(countDownTimer)
 		clockText.isVisible = false
 		stopGame = true
+		backgroundSound = audio.stop(backgroundSoundChannel)
 	end
 end
 
@@ -267,7 +270,7 @@ pointsText:setTextColor(255/255, 255/255, 255/255)
 
 -- display the number of seconds remaining
 clockText = display.newText( secondsLeft .. "", display.contentWidth*(5/6), display.contentHeight*(6/7), nil, 150)
-clockText:setTextColor(255/255, 255/255, 255/255)
+clockText:setTextColor(0/255, 255/255, 0/255)
 clockText.isVisible = true
 
 -- displays a question and sets the colour
